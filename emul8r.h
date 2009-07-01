@@ -8,6 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "SDL/SDL.h"
+#include "mt19937ar.h"
 
 #define FIRMWARE  "chip8.rom"
 #define MEMSIZE   0x1000

@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall --std=c99 `sdl-config --cflags`
 LIBS = `sdl-config --libs`
-SRC = emul8r.c rom.c video.c chip8.c
+SRC = emul8r.c rom.c video.c chip8.c mt19937ar.c
 OBJ = ${SRC:.c=.o}
 OUT = emul8r
 
