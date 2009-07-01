@@ -1,0 +1,3 @@
+*.o
+games/*
+emul8r

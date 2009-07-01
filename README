@@ -1,0 +1,45 @@
+emul8r ~ chip 8 emulator
+
+== PROMPT ================================================================
+
+  emul8r is a simple hack that I started because I couldn't find a decent
+Chip-8 emulator that worked the way I needed it to, and that worked on
+Linux. Why do I want a Chip-8 emulator? WIPEOFF is actually kind of fun,
+and it's fun to homebrew on it and see how much you can pack into 4K.
+
+== GOALS =================================================================
+
+  1. emul8r should function as closely as possible to the implementation 
+of Chip-8 on the COSMAC VIP and other 1802-based computers. 2. It should
+also be easy to use while being completely configurable.
+
+== DEPENDENCIES ==========================================================
+
+  SDL. And a C compiler if you plan on building it yourself.
+
+== INTERNALS =============================================================
+
+  -- MEMORY MAP --
+  
+  The memory map is pretty simple. The firmware starts at 000h, and goes
+up to 1FFh. The firmware is made up of Chip-8 bytecode. On real Chip-8
+machines, those first 512 bytes are actually the interpreter itself, but
+on this implementation it is not necessary. I decided that would be better
+filled with a 'firmware' of Chip-8 bytecode, along with some standard
+addresses for where the font sprites, call stack, and video memory go.
+This accomodates the second goal, which is configurability.
+
+  000h Firmware (144 bytes, 000h to 1FFh is actually all firmware)
+  090h Font sprites (80 bytes, 16 sprites * 5 bytes each)
+  0E0h Call stack, depth 16 (32 bytes, 16 levels * 2 bytes per address)
+  100h Video memory (256 bytes)
+  200h Game entry point
+  
+  -- FIRMWARE --
+  
+  The firmware is just a 256 byte blob of Chip-8 bytecode and data that
+goes in front of Chip-8 games. By default, it only consists of a jump
+instruction that sends the program counter to the game entry point. If you
+were to modify it, you could change the default initial values of video
+memory, how the font sprites work, and even how games start by adding a
+splash screen or something like that.
