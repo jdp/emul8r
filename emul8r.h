@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include "SDL/SDL.h"
 
-#define FIRMWARE  "FIRMWARE"
+#define FIRMWARE  "chip8.rom"
 #define MEMSIZE   0x1000
 #define FIRMADDR  0x000
 #define FIRMSIZE  0x100

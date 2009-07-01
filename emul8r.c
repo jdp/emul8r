@@ -26,7 +26,7 @@ void play(const char* filename) {
 	/* Load a ROM and get ready to play! */
 	state->memory = rom_load(filename);
 	if (state->memory == NULL) {
-		fprintf(stderr, "Could not load ROM\n");
+		/* rom_load will show it's own error */
 		return;
 	}
 	
