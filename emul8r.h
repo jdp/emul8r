@@ -31,6 +31,7 @@ typedef struct chip8 {
 	int sound_timer;     /* sound timer               */
 	unsigned char v[16]; /* general purpose registers */
 	ROM memory;          /* rom memory image          */
+	int keys;            /* current key states        */
 } CHIP8;
 
 /* emul8r.c */

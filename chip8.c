@@ -16,6 +16,7 @@ CHIP8* chip8_new() {
 		state->v[i] = 0;
 	}
 	state->memory = NULL;
+	state->keys = 0;
 	return state;
 }
 
@@ -203,12 +204,25 @@ int chip8_cycle(CHIP8* state) {
 			
 		case 0xd:
 			/* DXYN, Draw N-height sprite at VX, VY, collision in VF */
-			x = ((ir & 0x0f00) >> 8) % 64;
-			y = ((ir & 0x00f0) >> 4) % 32;
+			x = (ir & 0x0f00) >> 8;
+			y = (ir & 0x00f0) >> 4;
 			n = (ir & 0x000f);
-			unsigned char data;
-			for (int line = 0; line < n; line++) {
-				data = state->memory[state->index+line];
+			int i, j;
+			unsigned char *vidmem = state->memory + VIDEOADDR;
+			int vdata, spriteline;
+			for (int scan = 0; scan < n; scan++) {
+				/* Calculate on-screen coordinates of sprite origin */
+				i = state->v[x] % 64;
+				j = (state->v[y] + scan) % 32;
+				/* Get row of sprite data */
+				spriteline = vidmem[state->index+scan] << 8;
+				/* Get two-byte buffer of video memory, need for sprite shifting */
+				vdata = (vidmem[j*8+i] << 8) + vidmem[j*8+i+1];
+				/* Shift sprite data as necessary, XOR it to buffer */
+				vdata ^= spriteline >> (i % 8);
+				/* Put video buffer back into memory */
+				vidmem[j*8+i] = (vdata & 0xff00) >> 8;
+				vidmem[j*8+i+1] = vdata & 0x00ff;
 			}
 			break;
 		
